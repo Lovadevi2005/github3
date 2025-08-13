@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            color: white;
+            padding: 20px;
+        }
+
+        .weather-container {
+            max-width: 400px;
+            margin: auto;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            padding: 10px;
+            width: 60%;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            background: #ff9800;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #weather-result img {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="weather-container">
+        <h1>Weather App</h1>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button id="searchBtn">Search</button>
+
+        <div id="weather-result">
+            <h2 id="city-name"></h2>
+            <h3 id="temp"></h3>
+            <p id="description"></p>
+            <img id="icon" alt="">
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "YOUR_API_KEY"; // Replace with your OpenWeatherMap API key
+
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const city = document.getElementById("city").value;
+            if (city) {
+                getWeather(city);
+            }
+        });
+
+        function getWeather(city) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === "404") {
+                        alert("City not found!");
+                        return;
+                    }
+                    document.getElementById("city-name").textContent = data.name;
+                    document.getElementById("temp").textContent = `${data.main.temp} °C`;
+                    document.getElementById("description").textContent = data.weather[0].description;
+                    document.getElementById("icon").src = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+                })
+                .catch(() => {
+                    alert("Error fetching weather data.");
+                });
+        }
+    </script>
+</body>
+</html>
