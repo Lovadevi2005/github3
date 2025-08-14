@@ -1,0 +1,66 @@
+// This is a simple example. As your site grows, you might add more functionality.
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Smooth scrolling for navigation links
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = e.target.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                window.scrollTo({
+                    top: targetSection.offsetTop - document.querySelector('.main-header').offsetHeight,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // You could add form validation here for the contact form
+    const contactForm = document.querySelector('.contact-form');
+    contactForm.addEventListener('submit', (e) => {
+        // Simple client-side validation
+        const emailInput = contactForm.querySelector('input[name="email"]');
+        if (!emailInput.value.includes('@')) {
+            alert('Please enter a valid email address.');
+            e.preventDefault(); // Prevent form submission
+        } else {
+            alert('Thank you for your message! We will get back to you soon.');
+            // In a real application, you would send this data to a server.
+        }
+    });
+
+    // Animate elements on scroll (using Intersection Observer)
+    const sections = document.querySelectorAll('section');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => {
+        section.classList.add('hidden'); // Initially hide the sections
+        observer.observe(section);
+    });
+
+    // For the CSS to support the animation, you'd add:
+    /*
+    .hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    */
+});
